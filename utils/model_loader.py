@@ -45,7 +45,7 @@ class ModelLoader(BaseModel):
             print("Loading LLM from openai......")
             openai_api_key = os.getenv("OPENAI_API_KEY")
             model_name = self.config["llm"]["openai"]["model_name"]
-            llm = ChatOpenai( model = model_name , api_key = openai_api_key )
+            llm = ChatOpenai( model = "o4-mini" , api_key = openai_api_key )
         
         elif self.model_provider == "groq":
             print("Loading LLM from groq......")
