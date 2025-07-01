@@ -3,13 +3,14 @@ from pydantic import BaseModel
 from agent.agentic_workflow import GraphBuilder
 from fastapi.responses import JSONResponse
 import os
+import traceback
 
 app = FastAPI()
 
 
 
 class QueryRequest(BaseModel):
-    query: str
+    question: str
 
 @app.post("/query")
 async def query_travel_agent(query:QueryRequest):
@@ -20,7 +21,7 @@ async def query_travel_agent(query:QueryRequest):
         react_app=graph()
         
         png_graph = react_app.get_graph().draw_mermaid_png()
-        with open("my_gra ph.png", "wb") as f:
+        with open("my_graph.png", "wb") as f:
             f.write(png_graph)
 
         print(f"Graph saved as 'my_graph.png' in {os.getcwd()}")
@@ -37,6 +38,10 @@ async def query_travel_agent(query:QueryRequest):
         
         return {"answer": final_output}
     except Exception as e:
-        return JSONResponse(status_code=500, content={"error": str(e)})
+        # Capture full traceback for easier debugging
+        tb_str = traceback.format_exc()
+        # Log traceback to stdout which uvicorn will capture
+        print("Error while handling /query request:\n", tb_str)
+        return JSONResponse(status_code=500, content={"error": str(e), "traceback": tb_str})
     
     
