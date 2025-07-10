@@ -1,3 +1,22 @@
+"""
+tools/expense_calculator_tool.py
+================================
+Simple arithmetic utilities (multiply, add, divide) exposed as LangChain tools
+so the agent can perform on-the-fly cost estimations without leaving the graph.
+
+Why a separate tool?
+--------------------
+The LLM is great at reasoning but unreliable at exact arithmetic. Delegating
+math-heavy work to a deterministic Python function guarantees accuracy in the
+final itinerary cost breakdown.
+
+Adding more math helpers
+------------------------
+• Extend `utils/expense_calculator.py` with new operations (e.g. currency
+  formatting, percentage calculations).
+• Decorate a new callable inside `_setup_tools()` with `@tool` and return it so
+  it becomes available to the LLM.
+"""
 from utils.expense_calculator import Calculator
 from typing import List
 from langchain.tools import tool

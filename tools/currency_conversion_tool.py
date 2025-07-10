@@ -1,3 +1,21 @@
+"""
+tools/currency_conversion_tool.py
+================================
+Provides a single `convert_currency` LangChain tool that turns an amount from
+one currency into another using *ExchangeRate-API*.
+
+Configuration
+-------------
+Set the `EXCHANGE_RATE_API_KEY` environment variable in your `.env` file (or in
+your cloud secret manager) before running the agent.
+
+Extending
+---------
+If you’d like to support bulk conversions or display the exchange rate table:
+1. Expand `utils/currency_converter.py` with a new helper method.
+2. Add an `@tool` decorated callable inside `_setup_tools()` that wraps the new
+   helper.
+"""
 import os
 from utils.currency_converter import CurrencyConverter
 from typing import List

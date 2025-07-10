@@ -1,3 +1,25 @@
+"""
+tools/weather_info_tool.py
+=========================
+Provides LangChain `@tool` wrappers around OpenWeatherMap so the agent can fetch
+current conditions and multi-day forecasts.
+
+Quick start
+-----------
+1. Set the `OPENWEATHERMAP_API_KEY` environment variable (see your `.env` file).
+2. Instantiate `WeatherInfoTool` and append its `weather_tool_list` to the agent’s
+tool registry.
+
+Extending this tool
+-------------------
+• Add additional helper methods to `utils/weather_info.py` for other endpoints
+  (air-quality, UV index, etc.).
+• Decorate new callables inside `_setup_tools()` with `@tool` and return them in
+the list so LangGraph can surface them to the LLM.
+
+The class is intentionally lightweight and stateless so you can duplicate the
+pattern for other third-party APIs with minimal effort.
+"""
 import os
 from utils.weather_info import WeatherForecastTool
 from langchain.tools import tool

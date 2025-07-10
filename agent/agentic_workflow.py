@@ -1,3 +1,46 @@
+"""
+agent/agentic_workflow.py
+-------------------------
+This module contains the `GraphBuilder` class which assembles the **LangGraph** that powers
+our AI-driven Travel Planner agent.  The graph orchestrates a Large Language Model (LLM)
+with multiple domain-specific *tools* (weather, place search, expense calculator, currency
+converter, etc.) so that the agent can reason about a user request, decide which tool(s) to
+invoke, call them, and finally return a comprehensive response.
+
+High-level flow
+===============
+1. **LLM binding** – `GraphBuilder.__init__` loads the requested LLM provider               
+   (OpenAI by default, Groq supported) and *binds* the available tools so the model can
+   reference them with function-calling syntax.
+2. **Agent node** – `agent_function` is executed first. It provides the system prompt plus
+   the running conversation to the LLM.  If the LLM decides that a tool call is needed it
+   returns the corresponding JSON payload.
+3. **Tool node** – LangGraph’s built-in `ToolNode` inspects the LLM output, calls the
+   appropriate Python callable (our tool), and feeds the result back to the agent node.
+4. **Conditional edges** – `tools_condition` routes execution either through the tool node
+   (when a tool is requested) or directly to the `END` node when no further tool calls are
+   required.
+
+Customization guide
+===================
+• **Adding / removing tools**
+  1. Implement a tool class in `tools/` that exposes one or more `@tool`-decorated
+     callables and aggregates them into a list attribute (see `tools/weather_info_tool.py`
+     for a template).
+  2. In `GraphBuilder.__init__` extend `self.tools` with your new tool list.
+
+• **Changing the system prompt** – Edit `prompt_library/prompts.py::SYSTEM_PROMPT`.
+
+• **Changing the model provider or model name** – Pass `model_provider="groq"` (or
+  another provider) when instantiating `GraphBuilder` **or** edit `config/config.yaml`.
+
+• **Modifying the graph topology** – Adjust `build_graph()` to add more nodes (memory,
+  retrieval, etc.) or change the conditional logic.
+
+Keeping these customization hooks in mind you can fork this repository, swap out tools,
+re-write the prompt, and instantly spin up a bespoke "master agent" tailored to your own
+workflow.
+"""
 from utils.model_loader import ModelLoader
 
 from prompt_library.prompts import SYSTEM_PROMPT

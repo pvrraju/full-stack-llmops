@@ -1,3 +1,30 @@
+"""
+app.py
+======
+Streamlit front-end that interacts with the FastAPI backend (`main.py`).  This
+UI is intentionally simple—just an input box and a Markdown output—but gives you
+a complete full-stack demo to iterate on.
+
+How it works
+------------
+1. User types a question (e.g. “Plan a 5-day trip to Goa”).
+2. We POST the text to `http://localhost:8000/query`.
+3. The backend returns a Markdown-formatted travel plan which we render in the
+   Streamlit page.
+
+Customisation ideas
+-------------------
+• **Change endpoints** – edit `BASE_URL`.
+• **Add file download button** – call `utils.save_info_document.save_document`.
+• **Collect structured parameters** – replace the free-text input with
+  dedicated widgets (date pickers, sliders, etc.) then concatenate the prompt.
+
+Run locally
+-----------
+```
+streamlit run app.py
+```
+"""
 import streamlit as st
 import requests
 import datetime

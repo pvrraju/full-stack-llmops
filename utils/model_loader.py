@@ -1,3 +1,29 @@
+"""
+utils/model_loader.py
+=====================
+Centralised helper that instantiates a chat-based Large Language Model (LLM)
+object used across the repo.  Abstracting the *provider* behind this class
+avoids scattering API-specific code throughout the project and makes swapping
+models as easy as changing one line of YAML.
+
+Supported providers (out of the box):
+• **OpenAI** – default; controlled via `OPENAI_API_KEY`.  
+• **Groq** – experimental high-throughput chat completion endpoint; controlled
+  via `GROQ_API_KEY`.
+
+How provider selection works
+---------------------------
+1. When you create `ModelLoader(model_provider="openai")` (or omit the argument)
+   the class trivially passes.
+2. Internally we read `config/config.yaml` to fetch the model name for that
+   provider so you can keep hard-coded strings out of your code.
+
+Adding a new provider
+---------------------
+Subclassing `ModelLoader` isn’t necessary; just extend the `load_llm` method
+with an `elif` block and—optionally—update the YAML schema to include model
+parameters for the new provider.
+"""
 import os
 from dotenv import load_dotenv
 from typing import Literal, Optional, Any

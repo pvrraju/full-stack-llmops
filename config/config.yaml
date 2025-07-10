@@ -1,3 +1,10 @@
+# --------------------------------------------------------------
+# config/config.yaml
+# Centralised configuration file consumed by utils/model_loader.py
+# Edit the values below to point to a different LLM provider or
+# model name. You can also add additional top-level keys for other
+# parts of the application (database, cache, etc.).
+# --------------------------------------------------------------
 llm :
   openai:
     provider: "openai"

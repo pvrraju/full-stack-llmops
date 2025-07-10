@@ -1,3 +1,27 @@
+"""
+tools/place_search_tool.py
+=========================
+This module bundles a set of LangChain `@tool` callables that query **Google Places**
+or **Tavily** (fallback) to retrieve attractions, restaurants, activities, and
+transportation options for a given location.
+
+Environment variables
+---------------------
+• `GPLACES_API_KEY` – required for Google Places API access. If the key is *not*
+  available or the request fails, the tool automatically falls back to Tavily so
+  the agent still produces an answer.
+
+Extending / Customizing
+-----------------------
+1. Implement additional methods in `utils/place_info_search.py` for new search
+   categories (e.g. nightlife, coworking spaces).
+2. Inside `_setup_tools()` add a new `@tool` decorated function that calls the
+   corresponding helper and append it to the returned list.
+3. Register the updated tool list in `agent/agentic_workflow.py`.
+
+The design goal is to make it trivial to plug in alternative data providers or
+add new endpoints with minimal code changes.
+"""
 import os
 from utils.place_info_search import GooglePlaceSearchTool, TavilyPlaceSearchTool
 from typing import List

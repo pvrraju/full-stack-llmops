@@ -1,3 +1,28 @@
+"""
+utils/place_info_search.py
+==========================
+Contains two helper classes that tap into *Google Places* and *Tavily* search
+APIs.  These are *not* LangChain tools themselves—they simply encapsulate the
+raw API interactions so that `tools/place_search_tool.py` (or any other module)
+can consume them.
+
+Why separate helper vs. tool?
+----------------------------
+Decoupling keeps the low-level networking / error handling in one place while
+allowing multiple tool wrappers or notebook experiments to reuse the same
+logic.
+
+Fallback strategy
+-----------------
+If Google Places fails (missing API key, quota exceeded, etc.) the agent falls
+back to Tavily so users still receive an answer.
+
+Extending
+---------
+• Implement additional `google_search_*` or `tavily_search_*` methods for new
+  categories (night-life, museums, etc.).  
+• Update `tools/place_search_tool.py` to surface them to the LLM.
+"""
 import os
 import json
 from langchain_tavily import TavilySearch

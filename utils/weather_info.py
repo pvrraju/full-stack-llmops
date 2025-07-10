@@ -1,3 +1,24 @@
+"""
+utils/weather_info.py
+=====================
+Lightweight wrapper around the OpenWeatherMap REST API.  The class is kept
+framework-agnostic so it can be reused in notebooks, CLI scripts, or wrapped
+into a LangChain tool (see `tools/weather_info_tool.py`).
+
+Usage
+-----
+```
+weather = WeatherForecastTool(os.getenv("OPENWEATHERMAP_API_KEY"))
+weather.get_current_weather("Paris")
+```
+
+Extending
+---------
+OpenWeatherMap exposes many other endpoints (historical data, UV index, etc.).
+Add a new helper method that builds the URL + parameters and returns the JSON
+payload.  Keep the method stateless and handle exceptions gracefully so the
+agent has a predictable error surface.
+"""
 import requests
 
 class WeatherForecastTool:

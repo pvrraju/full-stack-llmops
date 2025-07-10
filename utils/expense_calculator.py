@@ -1,3 +1,18 @@
+"""
+utils/expense_calculator.py
+==========================
+Pure-Python arithmetic helper used by `tools/expense_calculator_tool.py`.
+Provides methods for basic math needed in travel cost estimation.  We keep the
+implementation small on purpose—if you need spreadsheet-grade functionality
+consider importing *NumPy* or *Pandas* instead.
+
+Adding new operations
+---------------------
+1. Implement a `@staticmethod` on `Calculator` that performs your desired
+   calculation.
+2. Expose it to the LLM by wrapping it inside a new `@tool` decorator in
+   `tools/expense_calculator_tool.py`.
+"""
 class Calculator:
     @staticmethod
     def multiply(a: int, b: int) -> int:

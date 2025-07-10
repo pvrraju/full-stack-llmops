@@ -1,3 +1,38 @@
+"""
+main.py
+=======
+FastAPI micro-service that exposes a single POST endpoint `/query` consumed by
+both the Streamlit app (`app.py`) and any other HTTP client.
+
+Request / Response contract
+---------------------------
+Request JSON:
+```
+{ "question": "Plan a trip to Goa for 5 days" }
+```
+Response JSON:
+```
+{ "answer": "...Markdown travel plan..." }
+```
+
+Inside the handler we:
+1. Instantiate `GraphBuilder` (our agent) – you can swap `model_provider` here.
+2. Compile the graph (`react_app = graph()`).
+3. Render a PNG of the LangGraph topology for debugging (`my_graph.png`).
+4. Invoke the graph with the user question.
+
+Extending the API
+-----------------
+• Add new routes (e.g. `/health`, `/tools`) to expose internal status.  
+• Move agent instantiation to a *startup* event if you want to reuse the graph
+  across requests.
+
+Running locally
+---------------
+```
+uvicorn main:app --reload
+```
+"""
 from fastapi import FastAPI
 from pydantic import BaseModel
 from agent.agentic_workflow import GraphBuilder

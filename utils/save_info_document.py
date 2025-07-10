@@ -1,3 +1,19 @@
+"""
+utils/save_info_document.py
+==========================
+Utility for exporting the agent’s Markdown response to a timestamped file on
+disk.  This can be triggered either from the backend (`main.py`) or directly
+from a notebook.
+
+Customisation options
+---------------------
+• `directory` parameter controls the output folder (defaults to `./output`).
+• Feel free to tweak the Markdown template (header, footer, emoji, etc.).
+
+Tip: If you plan to send the resulting file via email or upload to cloud
+storage, return the absolute file path from `save_document` so the caller can
+pass it along.
+"""
 import os
 import datetime
 
