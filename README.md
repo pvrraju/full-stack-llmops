@@ -1,4 +1,4 @@
-# 🌍 Full-Stack LLMOps – AI Travel Planner
+# 🌍 Full-Stack LLMOps
 
 An end-to-end reference project that demonstrates how to build, wire, and ship **agentic applications** powered by Large-Language-Models (LLMs).
 
