@@ -108,12 +108,76 @@ All server-side exceptions are returned with HTTP 500 and include a `traceback` 
 ---
 
 ## 🤖 Extending the Agent
+## 🤖 Build **Your Own** Tool-Equipped Agent
 
-1. **Add a new tool** – create a class in `tools/` that returns a list of `@tool`-decorated callables.  
-2. Append the tool list in `agent/agentic_workflow.py` (`self.tools.extend([...])`).  
-3. The agent can now call it autonomously – no further changes required.
+This project is intentionally opinionated *yet* highly extensible. In just a few
+lines of code you can bolt on brand-new capabilities, swap the LLM, or even
+reshape the entire execution graph.
 
-LangGraph ensures the agent decides when to call which tool and loops until it reaches an END node.
+### 1️⃣ Create a tool
+
+````python
+# tools/flight_search_tool.py
+from langchain.tools import tool
+from typing import List
+
+class FlightSearchTool:
+    def __init__(self):
+        self.flight_tool_list: List = self._setup_tools()
+
+    def _setup_tools(self) -> List:
+        @tool
+        def find_cheapest_flight(origin: str, destination: str, date: str) -> dict:
+            """Return the cheapest flight for the given route & date."""
+            # Call your favourite flight API here…
+            return {"price": 350, "airline": "Example Air"}
+
+        return [find_cheapest_flight]
+````
+
+*A tool is nothing more than a Python callable with JSON-serialisable inputs &
+outputs plus the `@tool` decorator.*
+
+### 2️⃣ Register the tool
+
+Open `agent/agentic_workflow.py` and add:
+
+```python
+from tools.flight_search_tool import FlightSearchTool
+
+self.flight_tools = FlightSearchTool()
+self.tools.extend(self.flight_tools.flight_tool_list)
+```
+
+That’s it—the LLM can now autonomously decide when to invoke
+`find_cheapest_flight`.
+
+### 3️⃣ (optional) Tweak the system prompt
+
+Tell the LLM *when* to use your new skill by editing
+`prompt_library/prompts.py`:
+
+> "When the user asks about flights, call `find_cheapest_flight`."
+
+### 4️⃣ Choose your LLM
+
+Swap providers by editing `config/config.yaml` **or** passing
+`GraphBuilder(model_provider="groq")` (OpenAI is default).
+
+### 5️⃣ Evolve the graph
+
+Add memory, retrieval augmentation, guardrail nodes, etc. by updating
+`GraphBuilder.build_graph()`. LangGraph compiles the topology once per request
+and caches it, so experimentation is quick.
+
+---
+
+## 🏗️ Reuse the framework for **any** domain
+
+Replace the travel-specific tools with finance calculators, knowledge-base
+search, IoT device controllers—whatever your project requires. The surrounding
+infrastructure (FastAPI, Streamlit, config, logging) remains unchanged so you
+can focus exclusively on tool logic and prompt design.
 
 ---
 
